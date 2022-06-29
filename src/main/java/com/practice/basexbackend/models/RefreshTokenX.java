@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.Instant;
 
-@Getter @Setter @AllArgsConstructor
+@Getter @Setter @RequiredArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "refresh_token")

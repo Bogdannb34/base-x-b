@@ -1,12 +1,14 @@
 package com.practice.basexbackend.models;
 
 import com.practice.basexbackend.enumeration.ERole;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-@Getter @Setter @AllArgsConstructor
-@NoArgsConstructor
+@Getter @Setter @RequiredArgsConstructor @NoArgsConstructor
 @Entity
 @Table(name = "roles")
 public class RoleX {
