@@ -1,14 +1,12 @@
 package com.practice.basexbackend.models;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.Instant;
 
-@Getter @Setter @RequiredArgsConstructor @NoArgsConstructor
+@Getter @Setter @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "refresh_token")
 public class RefreshTokenX {
