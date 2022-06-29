@@ -7,6 +7,7 @@ import com.practice.basexbackend.services.impl.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -24,6 +25,7 @@ import org.springframework.web.filter.CorsFilter;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static com.practice.basexbackend.constant.Security.PRIVATE_URLS;
 import static com.practice.basexbackend.constant.Security.PUBLIC_URLS;
 
 @Configuration @EnableWebSecurity
@@ -42,15 +44,26 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder);
+        // Enable CORS and disable CSRF
         http
-                .cors().and().csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests()
-                .antMatchers(PUBLIC_URLS).permitAll()
-                .anyRequest().authenticated()
-                .and()
+                .cors().and().csrf().disable();
+        // Set session management to stateless
+        http
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and();
+        // Set unauthorized requests exception handler
+        http
                 .exceptionHandling().accessDeniedHandler(jwtAccessDeniedHandler)
-                .authenticationEntryPoint(jwtAuthEntryPoint).and()
+                .authenticationEntryPoint(jwtAuthEntryPoint)
+                .and();
+        // Set permission on endpoints
+        http
+                .authorizeRequests()
+                .antMatchers(HttpMethod.POST, PUBLIC_URLS).permitAll()
+                .antMatchers(PRIVATE_URLS).hasRole("ADMIN")
+                .anyRequest().authenticated()
+                .and();
+        // Add JWT token filter
+        http
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
