@@ -10,10 +10,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 
-@Getter
-@Setter
-@RequiredArgsConstructor
-@NoArgsConstructor
+@Getter @Setter @AllArgsConstructor @NoArgsConstructor
 @Entity
 @Table(name = "users",
         uniqueConstraints = {
